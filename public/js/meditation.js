@@ -25,6 +25,7 @@ Meditation.prototype.time_counter = function(start) {
 
 Meditation.prototype.breathe = function(){
     var start = Date.now();
+    var self = this;
     // event.preventDefault();
     // console.log(interval_id==null);
     $('#breath').text(function(i, text){
@@ -34,15 +35,16 @@ Meditation.prototype.breathe = function(){
 
 
     if (interval_id == 0){
-      interval_id = setInterval(function() {time_counter(start)}, 100);
+      interval_id = setInterval(function() {self.time_counter(start)}, 100);
 
     }else{
       clearInterval(interval_id);
-      interval_id = setInterval(function() {time_counter(start)}, 100);
+      interval_id = setInterval(function() {self.time_counter(start)}, 100);
     };
 
 };
 
 
-var spaceHandler = function() {
-  }
+Meditation.prototype.time_counter = function(start) {
+  $('#time_count h2').text('Time: ' + ((Date.now()-start)/1000)+' sec')
+};

@@ -18,6 +18,3 @@ $(document).ready(function() {
 });
 
 
-function time_counter(start) {
-  $('#time_count h2').text('Time: ' + ((Date.now()-start)/1000)+' sec')
-};
