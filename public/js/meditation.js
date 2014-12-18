@@ -2,6 +2,7 @@ function Meditation(){
   this.max_inhale = 0;
   this.max_exhale = 0;
   interval_id = 0;
+  phase_start = Date.now();
 };
 
 
@@ -12,8 +13,8 @@ Meditation.prototype.update_max_inhale = function(new_record){
 };
 
 Meditation.prototype.update_max_exhale = function(last_record){
-  if(new_record > this.max_exhale){
-    this.max_exhale = new_record;
+  if(last_record > this.max_exhale){
+    this.max_exhale = last_record;
   };
 };
 
@@ -23,24 +24,45 @@ Meditation.prototype.time_counter = function(start) {
 };
 
 
+// Meditation.prototype.time_diff = function() {
+//   console.log('time_diff', ((Date.now()-this.phase_start)/1000));
+//   return ((Date.now()-this.phase_start)/1000);
+// };
+
+
 Meditation.prototype.breathe = function(){
-    var start = Date.now();
-    var self = this;
-    // event.preventDefault();
-    // console.log(interval_id==null);
-    $('#breath').text(function(i, text){
-      console.log(text === "Inhale");
-      return text === "Inhale" ? "Exhale" : "Inhale";
-    });
+  var self = this;
+  var t_collapsed = (Date.now() - phase_start)/1000;
+
+  console.log('max_inhale', self.max_inhale);
+  phase_start = Date.now();
 
 
-    if (interval_id == 0){
-      interval_id = setInterval(function() {self.time_counter(start)}, 100);
 
+  $('#breath').text(function(i, text){
+
+    if (text === "Inhale") {
+
+      self.update_max_inhale(t_collapsed);
+      // $("<li>Max inhale: "+self.max_inhale+" sec</li>").appendTo('#current_measure');
+      $("#max_in").text("Max Inhale: "+self.max_inhale);
+      return "Exhale";
     }else{
-      clearInterval(interval_id);
-      interval_id = setInterval(function() {self.time_counter(start)}, 100);
+      self.update_max_exhale(t_collapsed);
+      // $("<li>Max exhale: "+self.max_exhale+" sec</li>").appendTo('#current_measure');
+      $("#max_ex").text("Max Exhale: "+self.max_exhale);
+      return "Inhale";
     };
+  });
+
+
+  if (interval_id == 0){
+    interval_id = setInterval(function() {self.time_counter(phase_start)}, 100);
+
+  }else{
+    clearInterval(interval_id);
+    interval_id = setInterval(function() {self.time_counter(phase_start)}, 100);
+  };
 
 };
 
