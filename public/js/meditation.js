@@ -23,17 +23,26 @@ Meditation.prototype.time_counter = function(start) {
 };
 
 
-Meditation.prototype.breath = function(){
-  var start = Date.now();
-  var self = this;
-  $('#breath').text(function(i, text){
-    return text === "Inhale" ? "Exhale" : "Inhale";
-  });
-  if (this.interval_id == 0) {
-    this.interval_id = setInterval(function() {self.time_counter(start)}, 100);
-  } else {
-    clearInterval(interval_id);
-    this.interval_id = setInterval(function() { self.time_counter(start)}, 100);
-    //debugger
-  };
+Meditation.prototype.breathe = function(){
+    var start = Date.now();
+    // event.preventDefault();
+    // console.log(interval_id==null);
+    $('#breath').text(function(i, text){
+      console.log(text === "Inhale");
+      return text === "Inhale" ? "Exhale" : "Inhale";
+    });
+
+
+    if (interval_id == 0){
+      interval_id = setInterval(function() {time_counter(start)}, 100);
+
+    }else{
+      clearInterval(interval_id);
+      interval_id = setInterval(function() {time_counter(start)}, 100);
+    };
+
 };
+
+
+var spaceHandler = function() {
+  }
